@@ -1,0 +1,58 @@
+// coin change problem.
+// recursive appraoch.
+class Solution {
+    public int helper(int[] coins,int amount,int idx,int n)
+    {
+        if(amount==0)
+        {
+            return 0;
+        }
+        if(idx>=n || amount<0)
+        {
+             return (int)1e9;
+        }
+        int include = 1+helper(coins,amount-coins[idx],idx,n);
+        int exclude = helper(coins,amount,idx+1,n);
+        return Math.min(include,exclude);
+    }
+    public int coinChange(int[] coins, int amount) {
+        int n = coins.length;
+        return helper(coins,amount,0,n)==(int)1e9?-1:helper(coins,amount,0,n);
+    }
+} 
+
+// optimize it with memoization..
+
+class Solution {
+    public int helper(int[] coins,int amount,int idx,int n,int[][] dp)
+    {
+        if(amount==0)
+        {
+            return 0;
+        }
+        if(idx>=n || amount<0)
+        {
+             return (int)1e9;
+        }
+        if(dp[idx][amount]!=-1)
+        {
+            return dp[idx][amount];
+        }
+        int include = 1+helper(coins,amount-coins[idx],idx,n,dp);
+        int exclude = helper(coins,amount,idx+1,n,dp);
+        dp[idx][amount] =  Math.min(include,exclude);
+        return dp[idx][amount];
+    }
+    public int coinChange(int[] coins, int amount) {
+        int n = coins.length;
+        int[][] dp = new int[n+1][amount+1];
+        for(int i=0;i<n;i++)
+        {
+            for(int j=0;j<=amount;j++)
+            {
+                dp[i][j] = -1;
+            }
+        }
+        return helper(coins,amount,0,n,dp)==(int)1e9?-1:helper(coins,amount,0,n,dp);
+    }
+}
