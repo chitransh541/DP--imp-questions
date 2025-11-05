@@ -1,0 +1,59 @@
+// rod cuting problem recursive approach..
+
+class Solution {
+    public int cutRod(int[] price) {
+        // code here
+        int n = price.length;
+        return helper(price,n,0);
+    }
+    public int helper(int[] price,int n,int idx)
+    {
+        if(idx>=price.length || n==0)
+        {
+            return 0;
+        }
+        int include=0;
+        if((idx+1)<=n)
+        {
+            include = price[idx]+helper(price,n-(idx+1),idx);
+        }
+        int exclude = helper(price,n,idx+1);
+        return Math.max(include,exclude);
+    }
+}
+
+// optimized it with memoization..
+
+class Solution {
+    public int cutRod(int[] price) {
+        // code here
+        int n = price.length;
+        int[][] dp = new int[n+1][n+1];
+        for(int i=0;i<n;i++)
+        {
+            for(int j=0;j<=n;j++)
+            {
+                dp[i][j] = -1;
+            }
+        }
+        return helper(price,n,0,dp);
+    }
+    public int helper(int[] price,int n,int idx,int[][] dp)
+    {
+        if(idx>=price.length || n==0)
+        {
+            return 0;
+        }
+        if(dp[idx][n]!=-1)
+        {
+            return dp[idx][n];
+        }
+        int include=0;
+        if((idx+1)<=n)
+        {
+            include = price[idx]+helper(price,n-(idx+1),idx,dp);
+        }
+        int exclude = helper(price,n,idx+1,dp);
+        return dp[idx][n]= Math.max(include,exclude);
+    }
+}
