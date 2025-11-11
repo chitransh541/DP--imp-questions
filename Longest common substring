@@ -1,0 +1,70 @@
+// longest common substring code....
+// Recursive appraoch..
+// User function Template for Java
+
+class Solution {
+    public int helper(int i,int j,String s1,String s2,int count)
+    {
+        if(i>=s1.length() || j>=s2.length())
+        {
+            return count;
+        }
+        if(s1.charAt(i)==s2.charAt(j))
+        {
+            count = helper(i+1,j+1,s1,s2,count+1);
+        }
+        int lh = helper(i+1,j,s1,s2,0);
+        int rh = helper(i,j+1,s1,s2,0);
+        return Math.max(count,Math.max(lh,rh));
+        
+    }
+    public int longestCommonSubstr(String s1, String s2) {
+        // code here
+        return helper(0,0,s1,s2,0);
+    }
+}
+
+// memeoization appraoch
+class Solution {
+    int[][] dp;
+    int maxLen = 0;
+
+    public int helper(int i, int j, String s1, String s2) {
+        // Base case
+        if (i == 0 || j == 0)
+            return 0;
+
+        // If already computed
+        if (dp[i][j] != -1)
+            return dp[i][j];
+
+        // If characters match → extend substring
+        if (s1.charAt(i - 1) == s2.charAt(j - 1)) {
+            dp[i][j] = 1 + helper(i - 1, j - 1, s1, s2);
+            maxLen = Math.max(maxLen, dp[i][j]);
+        } else {
+            dp[i][j] = 0; // mismatch breaks substring
+        }
+
+        // Still explore other combinations to ensure max
+        helper(i - 1, j, s1, s2);
+        helper(i, j - 1, s1, s2);
+
+        return dp[i][j];
+    }
+
+    public int longestCommonSubstr(String s1, String s2) {
+        int n = s1.length(), m = s2.length();
+        dp = new int[n + 1][m + 1];
+
+        // Initialize dp with -1
+        for (int i = 0; i <= n; i++) {
+            for (int j = 0; j <= m; j++) {
+                dp[i][j] = -1;
+            }
+        }
+
+        helper(n, m, s1, s2);
+        return maxLen;
+    }
+}
