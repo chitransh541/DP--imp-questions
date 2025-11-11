@@ -1,0 +1,61 @@
+// Recursive solution for minimum costs for ticket..
+class Solution {
+    public int helper(int n,int[] days,int[] costs,int idx)
+    {
+        if(idx>=n)
+        {
+            return 0;
+        }
+
+        int option1 = costs[0]+helper(n,days,costs,idx+1);
+       int i;
+       for(i=idx;i<n && days[i]<days[idx]+7;i++);
+       int option2 = costs[1]+helper(n,days,costs,i);
+
+       for(i=idx;i<n && days[i]<days[idx]+30;i++);
+       int option3 = costs[2]+helper(n,days,costs,i);
+
+       return Math.min(option1,Math.min(option2,option3));
+        
+    }
+    public int mincostTickets(int[] days, int[] costs) {
+        int n = days.length;
+        return helper(n,days,costs,0);
+    }
+} 
+
+// optimzing the code using memoization...
+
+class Solution {
+    public int helper(int n,int[] days,int[] costs,int idx,int[] dp)
+    {
+        if(idx>=n)
+        {
+            return 0;
+        }
+        if(dp[idx]!=-1)
+        {
+            return dp[idx];
+        }
+        int option1 = costs[0]+helper(n,days,costs,idx+1,dp);
+       int i;
+       for(i=idx;i<n && days[i]<days[idx]+7;i++);
+       int option2 = costs[1]+helper(n,days,costs,i,dp);
+
+       for(i=idx;i<n && days[i]<days[idx]+30;i++);
+       int option3 = costs[2]+helper(n,days,costs,i,dp);
+
+       dp[idx] =  Math.min(option1,Math.min(option2,option3));
+       return dp[idx];
+        
+    }
+    public int mincostTickets(int[] days, int[] costs) {
+        int n = days.length;
+        int[] dp = new int[n+1];
+        for(int i=0;i<n;i++)
+        {
+            dp[i] = -1;
+        }
+        return helper(n,days,costs,0,dp);
+    }
+}
