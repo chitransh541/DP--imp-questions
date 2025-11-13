@@ -1,0 +1,94 @@
+// recursive approach..
+class Solution {
+    public int numSquares(int n) {
+        ArrayList<Integer>list= new ArrayList<>();
+        for(int i=1;i<=n;i++)
+        {
+            if(i*i<=n)
+            {
+                list.add(i*i);
+            }
+        }
+        int[] arr = new int[list.size()];
+        int i=0;
+        for(int num:list)
+        {
+            arr[i++] = num;
+        }
+        return helper(0,arr,n);
+    }
+    public int helper(int idx,int[] arr,int target)
+    {
+        
+         if(target==0)
+         {
+            return 0;
+         }
+          if(idx>=arr.length || target<0)
+         {
+            return Integer.MAX_VALUE;
+         }
+         int include = helper(idx,arr,target-arr[idx]);
+         if(include!=Integer.MAX_VALUE)
+         {
+            include = 1+include;
+         }
+         int exclude = helper(idx+1,arr,target);
+         return Math.min(include,exclude);
+    }
+}
+
+// Memoization approach...
+
+class Solution {
+    public int numSquares(int n) {
+        ArrayList<Integer>list= new ArrayList<>();
+        for(int i=1;i<=n;i++)
+        {
+            if(i*i<=n)
+            {
+                list.add(i*i);
+            }
+        }
+        int[] arr = new int[list.size()];
+        int i=0;
+       
+        for(int num:list)
+        {
+            arr[i++] = num;
+        }
+        int[][] dp = new int[arr.length+1][n+1];
+        for(int k=0;k<arr.length+1;k++)
+        {
+            for(int j=0;j<n+1;j++)
+            {
+                dp[k][j] = -1;
+            }
+        }
+        return helper(0,arr,n,dp);
+    }
+    public int helper(int idx,int[] arr,int target,int[][] dp)
+    {
+        
+         if(target==0)
+         {
+            return 0;
+         }
+          if(idx>=arr.length || target<0)
+         {
+            return Integer.MAX_VALUE;
+         }
+         if(dp[idx][target]!=-1)
+         {
+            return dp[idx][target];
+         }
+         int include = helper(idx,arr,target-arr[idx],dp);
+         if(include!=Integer.MAX_VALUE)
+         {
+            include = 1+include;
+         }
+         int exclude = helper(idx+1,arr,target,dp);
+         dp[idx][target] = Math.min(include,exclude);
+         return dp[idx][target];
+    }
+}
