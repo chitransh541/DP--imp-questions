@@ -1,0 +1,77 @@
+// recursive approach..
+// User function Template for Java
+
+class Solution {
+    public static int helper(int i,int j,int[][] mat,int maxi)
+    {
+        int m = mat.length;
+        int n = mat[0].length;
+        if(i>=m || j>=n)
+        {
+            return 0;
+        }
+        int right = helper(i,j+1,mat,maxi);
+        int diag = helper(i+1,j+1,mat,maxi);
+        int down = helper(i+1,j,mat,maxi);
+        if(mat[i][j]==1)
+        {
+            int ans = 1+Math.min(right,Math.min(diag,down));
+            maxi = Math.max(maxi,ans);
+            return ans;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    static int maxSquare(int mat[][]) {
+        // code here
+        int maxi = 0;
+        return helper(0,0,mat,maxi);
+    }
+}
+
+// Memoization approach..
+// User function Template for Java
+
+class Solution {
+    public static int helper(int i,int j,int[][] mat,int[] maxi,int[][] dp)
+    {
+        int m = mat.length;
+        int n = mat[0].length;
+        if(i>=m || j>=n)
+        {
+            return 0;
+        }
+        if(dp[i][j]!=-1)
+        {
+            return dp[i][j];
+        }
+        int right = helper(i,j+1,mat,maxi,dp);
+        int diag = helper(i+1,j+1,mat,maxi,dp);
+        int down = helper(i+1,j,mat,maxi,dp);
+        if(mat[i][j]==1)
+        {
+            dp[i][j] = 1+Math.min(right,Math.min(diag,down));
+            maxi[0] = Math.max(maxi[0],dp[i][j]);
+            return dp[i][j];
+        }
+        else
+        {
+            return dp[i][j]= 0;
+        }
+    }
+    static int maxSquare(int mat[][]) {
+        // code here
+        int[] maxi = new int[1];
+        int m = mat.length;
+        int n = mat[0].length;
+        int[][] dp = new int[m][n];
+       for(int i=0;i<m;i++)
+       {
+           Arrays.fill(dp[i],-1);
+       }
+         helper(0,0,mat,maxi,dp);
+         return maxi[0];
+    }
+}
