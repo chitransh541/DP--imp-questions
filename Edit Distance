@@ -1,0 +1,71 @@
+// Recursive approach //
+
+class Solution {
+    public int helper(int i,int j,String str1,String str2)
+    {
+        if(i>=str1.length())
+        {
+            return str2.length()-j;
+        }
+        if(j>=str2.length())
+        {
+            return str1.length()-i;
+        }
+        if(str1.charAt(i)==str2.charAt(j))
+        {
+            return helper(i+1,j+1,str1,str2);
+        }
+       
+            int insert = 1+helper(i,j+1,str1,str2);
+            int update = 1+helper(i+1,j+1,str1,str2);
+            int delete = 1+helper(i+1,j,str1,str2);
+        
+        return Math.min(insert,Math.min(update,delete));
+    }
+    public int minDistance(String str1, String str2) {
+        return helper(0,0,str1,str2);
+    }
+}
+
+// Memoization appraoch //
+
+class Solution {
+    public int helper(int i,int j,String str1,String str2,int[][] dp)
+    {
+        if(i>=str1.length())
+        {
+            return str2.length()-j;
+        }
+        if(j>=str2.length())
+        {
+            return str1.length()-i;
+        }
+        if(dp[i][j]!=-1)
+        {
+            return dp[i][j];
+        }
+        if(str1.charAt(i)==str2.charAt(j))
+        {
+            return dp[i][j]= helper(i+1,j+1,str1,str2,dp);
+        }
+       
+            int insert = 1+helper(i,j+1,str1,str2,dp);
+            int update = 1+helper(i+1,j+1,str1,str2,dp);
+            int delete = 1+helper(i+1,j,str1,str2,dp);
+        
+        dp[i][j]= Math.min(insert,Math.min(update,delete));
+        return dp[i][j];
+    }
+    public int minDistance(String str1, String str2) {
+        int n = str1.length();
+        int m = str2.length();
+        int[][] dp = new int[n+1][m+1];
+        for(int i=0;i<n;i++)
+        {
+            for(int j=0;j<m;j++){
+                dp[i][j]=-1;
+            }
+        }
+        return helper(0,0,str1,str2,dp);
+    }
+}
