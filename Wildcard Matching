@@ -1,0 +1,42 @@
+// Recursive Approach //
+
+class Solution {
+    public boolean helper(int i,int j,String s,String p)
+    {
+        if(i<0 && j<0)
+        {
+            return true;
+        }
+        if(j<0 && i>=0)
+        {
+            return false;
+        }
+        if(i<0 && j>=0)
+        {
+            for(int k=0;k<=j;k++)
+            {
+                if(p.charAt(k)!='*')
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        if(s.charAt(i)==p.charAt(j) || p.charAt(j)=='?')
+        {
+            return helper(i-1,j-1,s,p);
+        }
+        else if(p.charAt(j)=='*')
+        {
+            return (helper(i,j-1,s,p)|| helper(i-1,j,s,p));
+        }
+        else
+        {
+            return false;
+        }
+    }
+    public boolean isMatch(String s, String p) {
+        return helper(s.length()-1,p.length()-1,s,p);
+    }
+}
