@@ -1,0 +1,67 @@
+// Recursive Appraoch //
+
+class Solution {
+    public int helper(int i,int j,String s,String t)
+    {
+        if(j>=t.length())
+        {
+            return 1;
+        }
+        if(i>=s.length())
+        {
+            return 0;
+        }
+        
+        int option1=0;
+        if(s.charAt(i)==t.charAt(j))
+        {
+            option1 =  helper(i+1,j+1,s,t);
+        }
+        int option2 = helper(i+1,j,s,t);
+        return option1+option2;
+    }
+    public int numDistinct(String s, String t) {
+        return helper(0,0,s,t);
+    }
+}
+
+// Memoization //
+
+class Solution {
+    public int helper(int i,int j,String s,String t,int[][] dp)  
+    {
+        if(j>=t.length())
+        {
+            return 1;
+        }
+        if(i>=s.length())
+        {
+            return 0;
+        }
+        if(dp[i][j]!=-1)
+        {
+            return dp[i][j];
+        }
+        
+        int option1=0;
+        if(s.charAt(i)==t.charAt(j))
+        {
+            option1 =  helper(i+1,j+1,s,t,dp);
+        }
+        int option2 = helper(i+1,j,s,t,dp);
+        return dp[i][j]= option1+option2;
+    }
+    public int numDistinct(String s, String t) {
+        int n = s.length();
+        int m = t.length();
+        int[][] dp = new int[n+1][m+1];
+        for(int i=0;i<n;i++)
+        {
+            for(int j=0;j<m;j++)
+            {
+                dp[i][j] = -1;
+            }
+        }
+        return helper(0,0,s,t,dp);
+    }
+}
