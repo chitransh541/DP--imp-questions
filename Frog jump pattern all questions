@@ -1,0 +1,188 @@
+// Frog jump //
+
+class Solution {
+    public int helper(int idx,int[] height,int[] dp)
+    {
+        
+        if(idx==height.length-1)
+        {
+            return 0;
+        }
+        if(dp[idx]!=-1)
+        {
+            return dp[idx];
+        }
+        int option1=Integer.MAX_VALUE;
+        if(idx+1<height.length)
+        {
+         option1 = Math.abs(height[idx]-height[idx+1])+helper(idx+1,height,dp);
+        }
+        int option2=Integer.MAX_VALUE;
+        if(idx+2<height.length)
+        {
+            option2 = Math.abs(height[idx]-height[idx+2])+helper(idx+2,height,dp);
+        }
+        
+        return dp[idx]= Math.min(option1,option2);
+    }
+    int minCost(int[] height) {
+        // code here
+        int n = height.length;
+        int[] dp = new int[n+1];
+        for(int i=0;i<n;i++)
+        {
+            dp[i] = -1;
+        }
+        return helper(0,height,dp);
+    }
+}
+
+// Frog Jump With k distance //
+
+class Solution {
+    public int helper(int idx,int[] height,int k)
+    {
+        if(idx==height.length-1)
+        {
+            return 0;
+        }
+        int mini = Integer.MAX_VALUE;
+        for(int i=1;i<=k;i++)
+        {
+            if(idx+i<height.length)
+            {
+                int jump = Math.abs(height[idx]-height[idx+i])+helper(idx+i,height,k);
+                mini = Math.min(mini,jump);
+            }
+        }
+        return mini;
+    }
+    public int frogJump(int[] heights, int k) {
+       return helper(0,heights,k);
+    }
+}
+
+// Min cost climbing //
+
+//Back-end complete function Template for Java
+
+class Solution {
+    public static int helper(int idx,int[] cost,int[] dp)
+    {
+        if(idx>cost.length)
+        {
+            return (int)1e9;
+        }
+        if(idx==cost.length)
+        {
+            return 0;
+        }
+        if(dp[idx]!=-1)
+        {
+            return dp[idx];
+        }
+        
+        int option1 = cost[idx]+helper(idx+1,cost,dp);
+        int option2 = cost[idx]+helper(idx+2,cost,dp);
+        return dp[idx]= Math.min(option1,option2);
+    }
+    static int minCostClimbingStairs(int[] cost) {
+        // Write your code here
+        int n = cost.length;
+        int[] dp = new int[n+1];
+        for(int i=0;i<n;i++)
+        {
+            dp[i]=-1;
+        }
+        return Math.min(helper(0,cost,dp),helper(1,cost,dp));
+    }
+};
+
+// Minimum Jumps //
+
+class Solution {
+    public int helper(int idx,int[] arr,int[] dp)
+    {
+        if(idx==arr.length-1)
+        {
+            return 0;
+        }
+        if(arr[idx]==0)
+        {
+            return (int)1e9;
+        }
+        if(dp[idx]!=-1)
+        {
+            return dp[idx];
+        }
+        int mini = Integer.MAX_VALUE;
+        for(int i=1;i<=arr[idx];i++)
+        {
+            if(idx+i<arr.length)
+            {
+              int  option1 = 1+helper(idx+i,arr,dp);
+              mini = Math.min(mini,option1);
+            }
+            
+        }
+        return dp[idx]= mini;
+        
+    }
+    public int minJumps(int[] arr) {
+        // code here
+        int n = arr.length;
+        int[] dp = new int[n+1];
+        for(int i=0;i<n;i++)
+        {
+            dp[i] = -1;
+        }
+       int ans = helper(0,arr,dp);
+       
+       if(ans>=(int)1e9)
+       {
+           return -1;
+       }
+       return ans;
+    }
+}
+
+// Climbing Stairs //
+
+class Solution {
+    public int climbStairs(int n) {
+       int[] dp = new int[n+1];
+       return helper(n,dp);
+    }
+    public int helper(int n,int[] dp)
+    {
+        if(n==0 || n==1) return 1;
+        if(dp[n]!=0) return dp[n];
+        dp[n] = helper(n-1,dp)+helper(n-2,dp);
+        return dp[n];
+    }
+}
+
+//  Ways to reach nth stairs //
+
+class Solution {
+    public int helper(int idx,int[] arr)
+    {
+        if(idx==arr.length)
+        {
+            return 1;
+        }
+        if(idx>arr.length)
+        {
+            return 0;
+        }
+           int option1 = helper(idx+1,arr);
+           int option2 = helper(idx+2,arr);
+        
+        return option1+option2;
+    }
+    int countWays(int n) {
+        // your code here
+        int[] arr = new int[n];
+        return helper(0,arr);
+    }
+}
