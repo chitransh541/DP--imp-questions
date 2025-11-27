@@ -1,0 +1,49 @@
+class Solution {
+
+    List<Integer>[][] dp;
+
+    public List<Integer> helper(int curr, int prev, int[] nums) {
+
+        int prevKey = prev + 1; // shift -1 → 0
+
+        if (curr >= nums.length) {
+            return new ArrayList<>();
+        }
+
+        // memo check
+        if (dp[curr][prevKey] != null) {
+            return new ArrayList<>(dp[curr][prevKey]); // return copy
+        }
+
+        // ---- NOT PICK ----
+        List<Integer> notpick = helper(curr + 1, prev, nums);
+
+        // ---- PICK ----
+        List<Integer> pick = new ArrayList<>();
+        if (prev == -1 || nums[curr] % nums[prev] == 0 || nums[prev] % nums[curr] == 0) {
+            pick = helper(curr + 1, curr, nums);
+            pick.add(0, nums[curr]);
+        }
+
+        // ---- CHOOSE LONGER ----
+        List<Integer> ans;
+        if (pick.size() > notpick.size()) {
+            ans = pick;
+        } else {
+            ans = notpick;
+        }
+
+        // store deep copy into dp
+        dp[curr][prevKey] = new ArrayList<>(ans);
+
+        return ans;
+    }
+
+    public List<Integer> largestDivisibleSubset(int[] nums) {
+        Arrays.sort(nums);
+        int n = nums.length;
+        dp = new ArrayList[n][n + 1]; // prev goes -1..n-1
+
+        return helper(0, -1, nums);
+    }
+}
